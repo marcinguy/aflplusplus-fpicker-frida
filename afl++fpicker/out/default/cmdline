@@ -1,0 +1,11 @@
+/data/local/tmp/afl++fpicker/fpicker/fpicker
+-v
+--fuzzer-mode
+afl
+-e
+attach
+-p
+test
+-f
+/data/local/tmp/afl++fpicker/fpicker/examples/test/fuzzer-agent.js
+--communication=send

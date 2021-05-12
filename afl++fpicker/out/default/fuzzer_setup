@@ -1,0 +1,6 @@
+# environment variables:
+AFL_KILL_SIGNAL=9
+AFL_NO_AFFINITY=1
+AFL_SKIP_BIN_CHECK=1
+# command line:
+'./afl-fuzz' '-m' 'none' '-i' 'in' '-o' 'out' '--' '/data/local/tmp/afl++fpicker/fpicker/fpicker' '-v' '--fuzzer-mode' 'afl' '-e' 'attach' '-p' 'test' '-f' '/data/local/tmp/afl++fpicker/fpicker/examples/test/fuzzer-agent.js' '--communication=send'
