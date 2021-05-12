@@ -1,6 +1,6 @@
 # aflplusplus-fpicker-frida
 
-Binaries and so files are aarch64
+Binaries and so files are aarch64 (API Level 29)
 
 Start frida server, copy libandroid-shmem.so to re.frida.server
 
@@ -92,6 +92,8 @@ make fpicker-linux
 
 For fpicker a NDK Andoird Project would be better. Maybe also for AFL++. VS building from chroot Clang12 (termux)
 
+A folder with binaries and .so files for aarch64 and x86_64, respectively, for everything would be nice
+
 -----
 Compiling fpicker for aarch64 (A secondary approach)
 
@@ -101,7 +103,9 @@ Compiling fpicker for aarch64 (A secondary approach)
   You need to include the working directory:      -I.
   You need to set the target:                     -target aarch64-none-linux-android29
 
+
 1. Check out a copy of the fpicker repo
+
 
  ```
  git clone https://github.com/ttdennis/fpicker
