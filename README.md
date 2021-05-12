@@ -1,12 +1,14 @@
 # aflplusplus-fpicker-frida
 
-Binaries are aarch64
+Binaries and so files are aarch64
 
 Start frida server, copy libandroid-shmem.so to re.frida.server
 
 Run with run.sh
 
 ## aarch64
+
+set CC to NDK compiler (aarch64)
 
 Make afl (AFLplusplus-aarch64) with 
 
@@ -17,6 +19,8 @@ Make fpicker with
 make fpicker-linux (did in chroot linux env - termux)
 
 ## x86_64
+
+set CC to NDK compiler (x86_64)
 
 Make afl (AFLplusplus-x86_64) with 
 
