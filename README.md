@@ -1,0 +1,34 @@
+# aflplusplus-fpicker-frida
+
+Binaries are aarch64
+
+Start frida server, copy libandroid-shmem.so to re.frida.server
+
+Run with run.sh
+
+## aarch64
+
+Make afl (AFLplusplus-aarch64) with 
+
+make all AFL_NO_X86=1
+
+Make fpicker with
+
+make fpicker-linux (did in chroot linux env - termux)
+
+## x86_64
+
+Make afl (AFLplusplus-x86_64) with 
+
+make all AFL_NO_X86=1
+
+Make fpicker with
+
+make fpicker-linux (did in chroot linux env - termux)
+
+
+
+
+
+
+
