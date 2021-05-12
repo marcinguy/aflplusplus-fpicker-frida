@@ -6,6 +6,8 @@ Start frida server, copy libandroid-shmem.so to re.frida.server
 
 Run with run.sh
 
+P.S You might need to create socket in /data/local/tmp/mysocket
+
 ## aarch64
 
 set CC to NDK compiler (aarch64)
