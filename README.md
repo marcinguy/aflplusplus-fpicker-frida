@@ -14,11 +14,16 @@ set CC to NDK compiler (aarch64)
 
 Make afl (AFLplusplus-aarch64) with 
 
+```
 make all AFL_NO_X86=1
+```
 
-Make fpicker with
+Make fpicker with (did in chroot linux env - termux)
 
-make fpicker-linux (did in chroot linux env - termux)
+```
+make fpicker-linux 
+
+```
 
 ## x86_64
 
@@ -27,14 +32,18 @@ set CC to NDK compiler (x86_64)
 
 Make afl (AFLplusplus-x86_64) with 
 
+```
 make all AFL_NO_X86=1
 
-Make fpicker with
+```
+Make fpicker with (did in chroot linux env - termux) (Not working yet)
 
-make fpicker-linux (did in chroot linux env - termux) (Not working yet)
+```
+make fpicker-linux 
 
+```
 
-For fpicket a NDK Andoird Project would be better. Maybe also for AFL++. VS building from chroot Clang12 (termux)
+For fpicker a NDK Andoird Project would be better. Maybe also for AFL++. VS building from chroot Clang12 (termux)
 
 
 
