@@ -90,6 +90,19 @@ make fpicker-linux
 
 ```
 
+fpicker (Android x86_64)
+
+```
+$HOME/Downloads/android-ndk-r21e/toolchains/llvm/prebuilt/linux-x86_64/bin/clang -MMD -MP  -target x86_64-linux-android29 -fdata-sections -ffunction-sections -fstack-protector-strong -funwind-tables -no-canonical-prefixes  --sysroot $HOME/Downloads/android-ndk-r21e/toolchains/llvm/prebuilt/linux-x86_64/sysroot -g -Wno-invalid-command-line-argument -Wno-unused-command-line-argument  -D_FORTIFY_SOURCE=2 -fpic -O0 -UNDEBUG -fno-limit-debug-info  -I$HOME/Downloads/android-ndk-r21e/sysroot/usr/include -I.   -DANDROID -fPIC -m64 -ffunction-sections -fdata-sections -Wall -Wno-format -Os -pipe -g3 fpicker.c fp_communication.c fp_standalone_mode.c fp_afl_mode.c -ldl -lm -lresolv -lrt -Wl,--export-dynamic -Wl,--gc-sections,-z,noexecstack -pthread -Wl,-allow-multiple-definition -v -nostdinc++ -Wformat -Werror=format-security  -c  ./fpicker.c
+
+```
+
+
+```
+$HOME/Downloads/android-ndk-r21e/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++ -Wl,--gc-sections -Wl,-rpath-link=$HOME/Downloads/android-ndk-r21e/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/x86_64-linux-android/29  fpicker.o fp_communication.o fp_standalone_mode.o fp_afl_mode.o -lgcc -Wl,--exclude-libs,libgcc.a -Wl,--exclude-libs,libgcc_real.a -latomic -Wl,--exclude-libs,libatomic.a -target x86_64-linux-android29 -no-canonical-prefixes    -Wl,--build-id   -nostdlib++ -Wl,--no-undefined -Wl,--fatal-warnings -L. -lfrida-core-linux -lc -lm -o fpicker
+
+```
+
 For fpicker a NDK Andoird Project would be better. Maybe also for AFL++. VS building from chroot Clang12 (termux)
 
 A folder with binaries and .so files for aarch64 and x86_64, respectively, for everything would be nice
