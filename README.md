@@ -31,7 +31,10 @@ make all AFL_NO_X86=1
 
 Make fpicker with
 
-make fpicker-linux (did in chroot linux env - termux) (Not working)
+make fpicker-linux (did in chroot linux env - termux) (Not working yet)
+
+
+For fpicket a NDK Andoird Project would be better. Maybe also for AFL++. VS building from chroot Clang12 (termux)
 
 
 
