@@ -1,0 +1,104 @@
+1. The vulnerable source
+---
+
+// https://www.tutorialspoint.com/cprogramming/c_input_output.htm
+
+#include <stdio.h>
+int main( ) {
+
+   char str[100];
+
+   printf( "Enter a value :");
+   gets( str );
+
+   printf( "\nYou entered: ");
+   puts( str );
+
+   return 0;
+}
+
+---
+
+2. Compilation with the afl-clang wrapper
+---
+
+$ afl-clang -fsanitize=address,undefined -Wformat -Werror=format-security -Werror=array-bounds -g -o simple simple.c
+afl-cc 2.52b by <lcamtuf@google.com>
+simple.c:9:4: warning: implicit declaration of function 'gets' is invalid in C99 [-Wimplicit-function-declaration]
+   gets( str );
+   ^
+1 warning generated.
+afl-as 2.52b by <lcamtuf@google.com>
+[+] Instrumented 12 locations (64-bit, non-hardened mode, ratio 100%).
+/usr/bin/ld: /tmp/simple-132369.o: in function `main':
+/home/builder/to_fuzz/simple/simple.c:9: warning: the `gets' function is dangerous and should not be used.
+
+---
+
+3. Manually teasing out the vulnerability
+---
+
+$ echo `perl -e 'print "A"x1000'` | ./simple
+Enter a value :
+You entered: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==22068==ERROR: AddressSanitizer: SEGV on unknown address 0x000000000000 (pc 0x000000515aa8 bp 0x4141414141414141 sp 0x7ffe8d95d628 T0)
+==22068==The signal is caused by a READ memory access.
+==22068==Hint: address points to the zero page.
+AddressSanitizer:DEADLYSIGNAL
+AddressSanitizer: nested bug in the same thread, aborting.
+
+---
+
+4. Building the corpus
+---
+
+$ dd bs=1 count=16 if=/dev/random of=in/testcase_0
+16+0 records in
+16+0 records out
+16 bytes copied, 0.000127094 s, 126 kB/s
+
+---
+
+5. Running the fuzzer
+---
+
+$ ./start
+$ ls out/
+master  slave1  slave2  slave3
+---
+
+6. Monitoring the fuzzer
+---
+
+$ ./monitor 
+
+OR
+
+$ tail -f nohup.log
+[*] Entering queue cycle 14.
+[*] Fuzzing test case #0 (2 total, 1 uniq crashes found)...
+[*] Fuzzing test case #1 (2 total, 1 uniq crashes found)...
+[*] Fuzzing test case #1 (2 total, 1 uniq crashes found)...
+...
+
+---
+
+7. Confirming the results
+---
+
+$ ls out/slave1/crashes/
+id:000000,sig:11,src:000000+000001,time:160,op:splice,rep:128  README.txt
+$ cat out/slave1/crashes/id\:000000\,sig\:11\,src\:000000+000001\,time\:160\,op\:splice\,rep\:128 | ./simple
+Enter a value :
+�e�=�6�9)�K/a��B�v��R�d�:An���S~�&�������������������������������B__N-�,K�ׯT�ǞZ���2\*
+AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==2083967==ERROR: AddressSanitizer: SEGV on unknown address 0x000000000000 (pc 0x000000515aa8 bp 0xf82c38aa7f000000 sp 0x7fffeeb4ebb8 T0)
+==2083967==The signal is caused by a READ memory access.
+==2083967==Hint: address points to the zero page.
+AddressSanitizer:DEADLYSIGNAL
+AddressSanitizer: nested bug in the same thread, aborting.
+
+---

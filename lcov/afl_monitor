@@ -1,0 +1,2 @@
+#!/bin/sh
+while true; do ./afl-whatsup out/; sleep 15; clear; done
